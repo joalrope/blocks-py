@@ -14,25 +14,17 @@ def check(blocks: List[str], token: str) -> List[str]:
     # El mismo es para usarlo en la llamada a la API.
 
     result = [blocks[0]]
-    indexes = [0]
 
     blocks = [b for b in blocks if b != blocks[0]]
 
     blocks_len = len(blocks)
 
     while blocks_len > 0:
-
         previous = result[-1]
 
-        x = 0
-
         for block in blocks:
-
-            x = x + 1
-
             if are_consecutive(previous, block, token):
                 result.append(block)
-                indexes.append(x - 1)
                 blocks = [b for b in blocks if b != block]
                 break
 
@@ -44,4 +36,4 @@ def check(blocks: List[str], token: str) -> List[str]:
 blocks = get_blocks()
 TOKEN = os.getenv('TOKEN')
 
-print(check(blocks, TOKEN))
+check(blocks, TOKEN)
