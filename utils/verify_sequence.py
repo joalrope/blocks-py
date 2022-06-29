@@ -1,7 +1,8 @@
+from cgi import print_form
 import os
 import requests
+
 from dotenv import load_dotenv
-from ...blocks import ordered_sequence_mock
 
 load_dotenv()
 
@@ -10,13 +11,15 @@ TOKEN = os.getenv('TOKEN')
 api_url: str = f'https://rooftop-career-switch.herokuapp.com/check?token={TOKEN}'
 
 
-def verify_sequence() -> bool:
+def verify_sequence(secuence: str) -> bool:
+
+    print('verificando --------------------')
+
     get_answer = requests.post(
-        api_url,  data={"encoded": ordered_sequence_mock})
+        api_url,  data={"encoded": secuence})
 
     json = get_answer.json()
 
-    print('es correcto?:', json)
+    print('-------------->', json)
 
-
-print(verify_sequence())
+    return json['message']

@@ -1,22 +1,11 @@
 import os
-import requests
 from dotenv import load_dotenv
 from typing import List
+
 from utils.are_consecutive import are_consecutive
-from mocks.blocks import blocks_mock, ordered_sequence_mock
+from utils.get_blocks import get_blocks
 
 load_dotenv()
-
-TOKEN = os.getenv('TOKEN')
-
-api_url: str = f'https://rooftop-career-switch.herokuapp.com/check?token={TOKEN}'
-
-get_answer = requests.post(api_url,  data={"encoded": ordered_sequence_mock})
-
-json = get_answer.json()
-print('es correcto?:', json)
-
-# result = json['encoded']
 
 
 def check(blocks: List[str], token: str) -> List[str]:
@@ -24,11 +13,35 @@ def check(blocks: List[str], token: str) -> List[str]:
     # IMPORTANTE: observar que está recibiendo un parámetro "token".
     # El mismo es para usarlo en la llamada a la API.
 
-    array_ordenado = are_consecutive(blocks[1], blocks[5], token)
+    result = [blocks[0]]
+    indexes = [0]
 
-    print(array_ordenado)
+    blocks = [b for b in blocks if b != blocks[0]]
 
-    return array_ordenado
+    blocks_len = len(blocks)
+
+    while blocks_len > 0:
+
+        previous = result[-1]
+
+        x = 0
+
+        for block in blocks:
+
+            x = x + 1
+
+            if are_consecutive(previous, block, token):
+                result.append(block)
+                indexes.append(x - 1)
+                blocks = [b for b in blocks if b != block]
+                break
+
+        blocks_len = len(blocks)
+
+    return ''.join(result)
 
 
-print(check(blocks_mock, TOKEN))
+blocks = get_blocks()
+TOKEN = os.getenv('TOKEN')
+
+print(check(blocks, TOKEN))

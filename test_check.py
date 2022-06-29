@@ -1,21 +1,20 @@
-# import requests
-# from typing import List
-# from main import check
+import os
 
-# blocks: List[str] = ['hy5tre3was4e', 'lmhgdjfdsysa', 'ikjfsxbvolkz']
+from dotenv import load_dotenv
+from typing import List
 
-# token: str = '9569a527-464f-4ccd-9c1a-ed794dc7a0b3'
+from main import check
+from utils.blocks import blocks_mock
+from utils.verify_sequence import verify_sequence
+
+load_dotenv()
+
+TOKEN = os.getenv('TOKEN')
+
+blocks: List[str] = blocks_mock
 
 
-# def test_test():
-#     api_url: str = f'https://rooftop-career-switch.herokuapp.com/check?token={token}'
+def test_check():
+    assert(verify_sequence(check(blocks, TOKEN))) == True
 
-#     is_sorted = requests.get(api_url)
-
-#     json = is_sorted.json()
-
-#     result = json['encoded']
-
-#     check(blocks, token)
-
-#     assert check(blocks, token) == [result]
+    #assert check(blocks, TOKEN) == [result]
